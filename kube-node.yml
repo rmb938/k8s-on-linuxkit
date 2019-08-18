@@ -1,0 +1,85 @@
+kernel:
+  image: linuxkit/kernel:4.19.51
+  cmdline: "console=tty0 console=ttyS0"
+init:
+  - linuxkit/init:1a0c6b624708b5a9e58b9a608a9ce3164e7b2908
+  - linuxkit/runc:c1f0db27e71d948f3134b31ce76276f843849b0a
+  - linuxkit/containerd:2e7e59b8af98a1cec834dc9fe7aba271bf4b0a41
+  - linuxkit/ca-certificates:v0.7
+  - linuxkit/memlogd:v0.7
+onboot:
+  - name: sysctl
+    image: linuxkit/sysctl:v0.7
+    readonly: false
+    binds:
+      - /etc/sysctl.d/01-kubernetes.conf:/etc/sysctl.d/01-kubernetes.conf
+  - name: sysfs
+    image: linuxkit/sysfs:v0.7
+  - name: rngd1
+    image: linuxkit/rngd:02c555b50cd1887aa628836662d2eec54c0d7e81
+    command: ["/sbin/rngd", "-1"]
+  - name: dhcpcd
+    image: linuxkit/dhcpcd:v0.7
+    command: ["/sbin/dhcpcd", "--nobackground", "-f", "/dhcpcd.conf", "-1"]
+  - name: format
+    image: linuxkit/format:v0.7
+    command: ["/usr/bin/format", "-type", "xfs", "-label", "NODE", "-verbose", "/dev/sda"]
+  - name: mounts
+    image: linuxkit/mount:v0.7
+    command: ["/usr/bin/mountie", "-label", "NODE", "/var/node"]
+services:
+  - name: acpid
+    image: linuxkit/acpid:v0.7
+    cgroupsPath: systemreserved/acpid
+  - name: ntpd
+    image: linuxkit/openntpd:v0.7
+    cgroupsPath: systemreserved/ntpd
+  - name: getty
+    image: linuxkit/getty:v0.7
+    env:
+     - INSECURE=true
+    binds:
+    - /etc/resolv.conf:/etc/resolv.conf
+    - /run:/run
+    - /tmp:/tmp
+    - /etc:/hostroot/etc
+    - /usr/bin/ctr:/usr/bin/ctr
+    - /usr/bin/runc:/usr/bin/runc
+    - /containers:/containers
+    - /var/log:/var/log
+    - /var/node:/var/node
+    - /var/lib/containerd:/var/lib/containerd
+    - /dev:/dev
+    - /sys:/sys
+    cgroupsPath: systemreserved/getty
+  - name: logwrite
+    image: linuxkit/logwrite:v0.7
+    cgroupsPath: systemreserved/logwrite
+  - name: kmsg
+    image: linuxkit/kmsg:v0.7
+    cgroupsPath: systemreserved/kmsg
+  - name: sshd
+    image: linuxkit/sshd:v0.7
+    cgroupsPath: systemreserved/sshd
+
+  # Start K8s stuff
+  - name: containerd
+    image: rbelgrave/containerd:dev
+    cgroupsPath: podruntime/cri-containerd
+  - name: kubelet
+    image: rbelgrave/kubelet:dev
+    cgroupsPath: podruntime/kubelet
+files:
+  - path: root/.ssh/authorized_keys
+    source: ~/.ssh/id_rsa.pub
+    mode: "0600"
+    optional: true
+  - path: /etc/os-release
+    contents: |
+      PRETTY_NAME="LinuxKit Kubernetes Project"
+  - path: /etc/sysctl.d/01-kubernetes.conf
+    contents: 'net.ipv4.ip_forward = 1'
+trust:
+  org:
+    - linuxkit
+    - rbelgrave
