@@ -7,7 +7,7 @@
 1. Run `make build`
 1. Run `make run`
 1. In another terminal run `make ssh-kubelet`
-1. Run `kubeadm init --config /etc/kubernetes/kubeadm.yaml`
+1. Run `kubeadm init`
 1. Run kubectl commands and probably break things
 
 
@@ -16,7 +16,7 @@
 ### Requirements
 
 * Hosts must be able to boot via iPXE
-* Hosts must have at least 2GB ram and 2 CPUs
+* Hosts must have at least 3GB ram and 2 CPUs
     * If you don't have enough ram you may get a kernel panic
     * If you don't have enough cpus kubeadm will complain
 * Hosts must have 1 unformatted disk device
@@ -33,5 +33,11 @@
     ```
 1. Once booted ssh into the host
     * `ssh -t root@${server_IP} ctr --namespace services.linuxkit tasks exec --tty --exec-id ssh-kubelet kubelet ash -l`
-1. Run `kubeadm init --config /etc/kubernetes/kubeadm.yaml`
+1. Run `kubeadm init`
 1. Run kubectl commands and probably break things
+
+## Automation
+
+When running on bare metal it is recommended to use iPXE or some sort of network booting system. If that is not possible then building a raw image and dd'ing it to a bootable device may work however there is a known [issue](https://github.com/linuxkit/linuxkit/issues/3154) that could prevent it from working.
+
+TODO: link to ansible to automate control plane, node joins, upgrades, ect...

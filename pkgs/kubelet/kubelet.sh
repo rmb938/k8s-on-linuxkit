@@ -7,24 +7,7 @@ fi
 
 mkdir -p /etc/kubernetes/manifests
 
-if [ ! -e /etc/kubernetes/kubeadm.yaml ] ; then
-
-# This is the default kubeadm master configuration
-# You may want to override this with something better
-cat > /etc/kubernetes/kubeadm.yaml << EOF
-apiVersion: kubeadm.k8s.io/v1beta2
-kind: InitConfiguration
-nodeRegistration:
-  criSocket: /run/containerd/containerd.sock
-  kubeletExtraArgs:
-    container-runtime: remote
-    runtime-request-timeout: 15m
-    container-runtime-endpoint: unix:///run/containerd/containerd.sock
-EOF
-
-fi
-
-await=/etc/kubernetes/manifests/kube-scheduler.yaml
+await=/var/lib/kubelet/config.yaml
 
 echo "kubelet.sh: waiting for ${await}"
 
@@ -33,6 +16,9 @@ until [ -f "${await}" ] ; do
 done
 
 echo "kubelet.sh: ${await} has arrived"
+echo "sleeping a bit more to make sure the other files are written"
+
+sleep 5
 
 . /var/lib/kubelet/kubeadm-flags.env
 

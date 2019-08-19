@@ -61,6 +61,7 @@ RUN mkdir -p /out/etc/apk && cp -r /etc/apk/* /out/etc/apk/
 #coreutils needed for du -B for disk image checks made by kubelet
 # example: $ du -s -B 1 /var/lib/kubelet/pods/...
 #          du: unrecognized option: B
+# install python for ansible
 RUN apk add --no-cache --initdb -p /out \
   alpine-baselayout \
   busybox \
@@ -76,8 +77,9 @@ RUN apk add --no-cache --initdb -p /out \
   openssl \
   socat \
   util-linux \
-  nfs-utils
-
+  nfs-utils \
+  python3
+  
 RUN cp $GOPATH/src/github.com/kubernetes/kubernetes/_output/bin/kubelet /out/usr/local/bin/kubelet
 RUN cp $GOPATH/src/github.com/kubernetes/kubernetes/_output/bin/kubeadm /out/usr/local/bin/kubeadm
 RUN cp $GOPATH/src/github.com/kubernetes/kubernetes/_output/bin/kubectl /out/usr/local/bin/kubectl
@@ -88,6 +90,7 @@ RUN cp $GOPATH/bin/crictl /out/usr/local/bin/crictl
 RUN cp $GOPATH/bin/critest /out/usr/local/bin/critest
 
 COPY kubelet.sh /out/usr/local/bin/kubelet.sh
+COPY crictl.yaml /out/etc/crictl.yaml
 
 RUN ls -la /out/usr/local/bin/
 
