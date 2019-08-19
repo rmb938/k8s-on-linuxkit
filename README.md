@@ -31,3 +31,6 @@
     dhcp
     chain http://${workstation_IP}:8080/ipxe
     ```
+1. Once booted ssh into the host
+1. Run `kubeadm init --config /etc/kubernetes/kubeadm.yaml`
+1. Run kubectl commands and probably break things
