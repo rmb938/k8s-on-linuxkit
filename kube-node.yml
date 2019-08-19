@@ -1,6 +1,6 @@
 kernel:
   image: linuxkit/kernel:4.19.51
-  cmdline: "console=tty0 console=ttyS0"
+  cmdline: "console=tty0 console=tty1 console=ttyS0"
 init:
   - linuxkit/init:1a0c6b624708b5a9e58b9a608a9ce3164e7b2908
   - linuxkit/runc:c1f0db27e71d948f3134b31ce76276f843849b0a
@@ -23,7 +23,7 @@ onboot:
     command: ["/sbin/dhcpcd", "--nobackground", "-f", "/dhcpcd.conf", "-1"]
   - name: format
     image: linuxkit/format:v0.7
-    command: ["/usr/bin/format", "-type", "xfs", "-label", "NODE", "-verbose", "/dev/sda"]
+    command: ["/usr/bin/format", "-force", "-type", "xfs", "-label", "NODE", "-verbose", "/dev/nvme0n1"]
   - name: mounts
     image: linuxkit/mount:v0.7
     command: ["/usr/bin/mountie", "-label", "NODE", "/var/node"]
@@ -60,6 +60,20 @@ services:
     cgroupsPath: systemreserved/kmsg
   - name: sshd
     image: linuxkit/sshd:v0.7
+    binds:
+    - /root/.ssh:/root/.ssh
+    - /etc/resolv.conf:/etc/resolv.conf
+    - /run:/run
+    - /tmp:/tmp
+    - /etc:/hostroot/etc
+    - /usr/bin/ctr:/usr/bin/ctr
+    - /usr/bin/runc:/usr/bin/runc
+    - /containers:/containers
+    - /var/log:/var/log
+    - /var/node:/var/node
+    - /var/lib/containerd:/var/lib/containerd
+    - /dev:/dev
+    - /sys:/sys
     cgroupsPath: systemreserved/sshd
 
   # Start K8s stuff
@@ -78,7 +92,7 @@ files:
     contents: |
       PRETTY_NAME="LinuxKit Kubernetes Project"
   - path: /etc/sysctl.d/01-kubernetes.conf
-    contents: 'net.ipv4.ip_forward = 1'
+    source: files/etc/sysctl.d/01-kubernetes.conf
 trust:
   org:
     - linuxkit
