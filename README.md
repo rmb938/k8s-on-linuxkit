@@ -32,5 +32,6 @@
     chain http://${workstation_IP}:8080/ipxe
     ```
 1. Once booted ssh into the host
+    * `ssh -t root@${server_IP} ctr --namespace services.linuxkit tasks exec --tty --exec-id ssh-kubelet kubelet ash -l`
 1. Run `kubeadm init --config /etc/kubernetes/kubeadm.yaml`
 1. Run kubectl commands and probably break things
