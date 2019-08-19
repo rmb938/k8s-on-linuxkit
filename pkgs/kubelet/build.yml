@@ -8,6 +8,7 @@ config:
   - /dev:/dev
   - /etc/resolv.conf:/etc/resolv.conf:ro
   - /etc/os-release:/etc/os-release:ro
+  - /var/log:/host/var/log
 
   # SHARE NODE PATHS START
   - /run/node:/run:rshared,rbind # run

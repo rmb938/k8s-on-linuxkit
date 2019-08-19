@@ -23,7 +23,7 @@ onboot:
     command: ["/sbin/dhcpcd", "--nobackground", "-f", "/dhcpcd.conf", "-1"]
   - name: format
     image: linuxkit/format:v0.7
-    command: ["/usr/bin/format", "-force", "-type", "xfs", "-label", "NODE", "-verbose", "/dev/nvme0n1"]
+    command: ["/usr/bin/format", "-force", "-type", "xfs", "-label", "NODE", "-verbose"]
   - name: mounts
     image: linuxkit/mount:v0.7
     command: ["/usr/bin/mountie", "-label", "NODE", "/var/node"]
