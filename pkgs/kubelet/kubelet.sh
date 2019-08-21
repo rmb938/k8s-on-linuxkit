@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ ! -e /opt/cni/bin/.opt.defaults-extracted ] ; then
-    tar -xzvf /root/cni.tgz -C /opt/cni/bin
+    tar -xzvf /opt/cni/cni.tgz -C /opt/cni/bin
     touch /opt/cni/bin/.opt.defaults-extracted
 fi
 

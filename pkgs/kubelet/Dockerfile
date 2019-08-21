@@ -84,7 +84,7 @@ RUN cp $GOPATH/src/github.com/kubernetes/kubernetes/_output/bin/kubelet /out/usr
 RUN cp $GOPATH/src/github.com/kubernetes/kubernetes/_output/bin/kubeadm /out/usr/local/bin/kubeadm
 RUN cp $GOPATH/src/github.com/kubernetes/kubernetes/_output/bin/kubectl /out/usr/local/bin/kubectl
 
-RUN tar -czvf /out/root/cni.tgz -C $GOPATH/src/github.com/containernetworking/plugins/bin .
+RUN mkdir -p /out/opt/cni/ && tar -czvf /out/opt/cni/cni.tgz -C $GOPATH/src/github.com/containernetworking/plugins/bin .
 
 RUN cp $GOPATH/bin/crictl /out/usr/local/bin/crictl
 RUN cp $GOPATH/bin/critest /out/usr/local/bin/critest

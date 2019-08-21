@@ -11,8 +11,9 @@ config:
   - /var/log:/host/var/log
 
   # SHARE NODE PATHS START
-  - /run/node:/run:rshared,rbind # run
-  - /var/node/var:/var:rshared,rbind # var
+  - /run/node:/run:rshared,rbind # /run
+  - /var/node/var:/var:rshared,rbind # /var
+  - /var/node/root:/root # /root
 
   - /var/node/etc/kubernetes:/etc/kubernetes:rshared,rbind # /etc/kubernetes
   - /var/node/etc/cni/net.d:/etc/cni/net.d:rshared,rbind # /etc/cni/net.d
@@ -34,6 +35,7 @@ config:
     mkdir:
       - /run/node
       - /var/node/var
+      - /var/node/root
       - /var/node/var/lib/kubelet
       - /var/node/etc/kubernetes
       - /var/node/etc/cni/net.d

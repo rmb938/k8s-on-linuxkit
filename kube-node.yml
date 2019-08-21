@@ -1,5 +1,5 @@
 kernel:
-  image: linuxkit/kernel:4.19.51
+  image: linuxkit/kernel:4.19.52
   cmdline: "console=tty0 console=tty1 console=ttyS0"
 init:
   - linuxkit/init:1a0c6b624708b5a9e58b9a608a9ce3164e7b2908
@@ -16,7 +16,7 @@ onboot:
   - name: sysfs
     image: linuxkit/sysfs:v0.7
   - name: rngd1
-    image: linuxkit/rngd:02c555b50cd1887aa628836662d2eec54c0d7e81
+    image: linuxkit/rngd:v0.7
     command: ["/sbin/rngd", "-1"]
   - name: dhcpcd
     image: linuxkit/dhcpcd:v0.7
@@ -71,6 +71,7 @@ services:
     - /containers:/containers
     - /var/log:/var/log
     - /var/node:/var/node
+    - /var/node/root:/root # /root
     - /var/lib/containerd:/var/lib/containerd
     - /dev:/dev
     - /sys:/sys

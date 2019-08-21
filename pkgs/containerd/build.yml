@@ -9,8 +9,8 @@ config:
   - /etc/resolv.conf:/etc/resolv.conf:ro
 
   # SHARE NODE PATHS START
-  - /run/node:/run:rshared,rbind # run
-  - /var/node/var:/var:rshared,rbind # var
+  - /run/node:/run:rshared,rbind # /run
+  - /var/node/var:/var:rshared,rbind # /var
 
   - /var/node/etc/kubernetes:/etc/kubernetes:rshared,rbind # /etc/kubernetes
   - /var/node/etc/cni/net.d:/etc/cni/net.d:rshared,rbind # /etc/cni/net.d
