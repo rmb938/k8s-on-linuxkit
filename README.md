@@ -37,6 +37,7 @@
 1. Once booted ssh into the host
     * `ssh root@${server_IP}`
 1. Create a kubeadm configuration at `/run/kubeadm.yaml`
+1. Run `touch /run/kubeadm-run`
 1. Run `tail -f /hostroot/var/log/kubeadm.out.log`
 1. Run kubectl commands and probably break things
 
@@ -62,6 +63,7 @@
               - $DISCOVERY_TOKEN_CA_CERT_HASH
             unsafeSkipCAVerification: false
         ```
+1. Run `touch /run/kubeadm-run`
 1. Run `tail -f /hostroot/var/log/kubeadm.out.log`
 1. Run kubectl commands and probably break things
 
