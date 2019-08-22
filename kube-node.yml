@@ -36,8 +36,8 @@ services:
     cgroupsPath: systemreserved/ntpd
   - name: getty
     image: linuxkit/getty:v0.7
-    env:
-     - INSECURE=true
+    # env:
+    #  - INSECURE=true
     binds:
     - /etc/resolv.conf:/etc/resolv.conf
     - /run:/run
@@ -62,22 +62,20 @@ services:
     binds:
     - /root/.ssh:/root/.ssh
     - /etc/resolv.conf:/etc/resolv.conf
-    - /run:/hostroot/run
+    - /run:/run
     - /tmp:/tmp
     - /etc:/hostroot/etc
     - /usr/bin/ctr:/usr/bin/ctr
     - /usr/bin/runc:/usr/bin/runc
     - /containers:/containers
-    - /var/log:/hostroot/var/log
+    - /var/log:/var/log
+    - /var/node:/var/node
+    - /var/lib/containerd:/var/lib/containerd
     - /dev:/dev
     - /sys:/sys
 
-    # SHARE NODE PATHS START
-    - /run/node:/run:rshared,rbind # /run
-    - /var/node/var/lib/kubelet:/var/lib/kubelet # /var/lib/kubelet
+    # SHARED NODE PATHS
     - /var/node/root:/root # /root
-
-    - /var/node/etc/kubernetes:/etc/kubernetes:rshared,rbind # /etc/kubernetes
     cgroupsPath: systemreserved/sshd
 
   # Start K8s stuff

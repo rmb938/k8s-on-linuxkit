@@ -2,7 +2,7 @@ FROM linuxkit/alpine:86cd4f51b49fb9a078b50201d892a3c7973d48ec AS build
 
 ## Variables
 ENV CONTAINERD_URL https://github.com/containerd/containerd.git
-ENV CONTAINERD_VERSION v1.2.7
+ENV CONTAINERD_VERSION v1.2.8
 
 ENV RUNC_URL https://github.com/opencontainers/runc.git
 ENV RUNC_VERSION v1.0.0-rc8

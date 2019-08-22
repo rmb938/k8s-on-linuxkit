@@ -13,6 +13,7 @@
 1. Run `tail -f /hostroot/var/log/kubeadm.out.log`
     * Once kubeadm says it's initialized successfully you can exit
 1. Run kubectl commands and probably break things
+1. When you are done run `poweroff -f`
 
 ## Bare Metal
 
@@ -36,6 +37,8 @@
     ```
 1. Once booted ssh into the host
     * `ssh root@${server_IP}`
+1. Exec into the kubelet container
+    * `ctr --namespace services.linuxkit tasks exec --tty --exec-id ssh-kubelet kubelet ash -l`
 1. Create a kubeadm configuration at `/run/kubeadm.yaml`
 1. Run `touch /run/kubeadm-run`
 1. Run `tail -f /hostroot/var/log/kubeadm.out.log`
@@ -50,6 +53,8 @@
     ```
 1. Once booted ssh into the host
     * `ssh root@${server_IP}`
+1. Exec into the kubelet container
+    * `ctr --namespace services.linuxkit tasks exec --tty --exec-id ssh-kubelet kubelet ash -l`
 1. Create a kubeadm configuration at `/run/kubeadm.yaml`
     * Use the master to get a kubeadm token and connection information, an example `kubeadm.yaml` is bellow
         ```

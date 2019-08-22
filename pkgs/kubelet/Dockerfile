@@ -2,7 +2,7 @@ FROM linuxkit/alpine:86cd4f51b49fb9a078b50201d892a3c7973d48ec AS build
 
 ## Variables
 ENV KUBERENTES_URL https://github.com/kubernetes/kubernetes.git
-ENV KUBERNETES_VERSION v1.15.2
+ENV KUBERNETES_VERSION v1.15.3
 
 ENV CRITOOLS_URL https://github.com/kubernetes-sigs/cri-tools.git
 ENV CRITOOLS_VERSION v1.15.0
@@ -61,7 +61,6 @@ RUN mkdir -p /out/etc/apk && cp -r /etc/apk/* /out/etc/apk/
 #coreutils needed for du -B for disk image checks made by kubelet
 # example: $ du -s -B 1 /var/lib/kubelet/pods/...
 #          du: unrecognized option: B
-# install python for ansible
 RUN apk add --no-cache --initdb -p /out \
   alpine-baselayout \
   busybox \
@@ -77,8 +76,7 @@ RUN apk add --no-cache --initdb -p /out \
   openssl \
   socat \
   util-linux \
-  nfs-utils \
-  python3
+  nfs-utils
   
 RUN cp $GOPATH/src/github.com/kubernetes/kubernetes/_output/bin/kubelet /out/usr/local/bin/kubelet
 RUN cp $GOPATH/src/github.com/kubernetes/kubernetes/_output/bin/kubeadm /out/usr/local/bin/kubeadm
