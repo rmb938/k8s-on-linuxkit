@@ -87,7 +87,7 @@ The files listed bellow are required for kubeadm to run.
 * `/run/kubeadm-run`
     * kubeadm will wait to run until this file exists.
 
-These files can be created via ssh or other means by mounting `/run/node:/run` inside another container.
+These files can be created via execing into the kubelet container or other means by mounting `/run/node:/run` inside another container.
 
 Once kubeadm runs and creates the file `/var/lib/kubelet/config.yaml` it will never run again on the node.
 
