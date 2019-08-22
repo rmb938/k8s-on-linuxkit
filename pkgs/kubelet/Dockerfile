@@ -90,6 +90,7 @@ RUN cp $GOPATH/bin/crictl /out/usr/local/bin/crictl
 RUN cp $GOPATH/bin/critest /out/usr/local/bin/critest
 
 COPY kubelet.sh /out/usr/local/bin/kubelet.sh
+COPY kubeadm.sh /out/usr/local/bin/kubeadm.sh
 COPY crictl.yaml /out/etc/crictl.yaml
 
 RUN ls -la /out/usr/local/bin/

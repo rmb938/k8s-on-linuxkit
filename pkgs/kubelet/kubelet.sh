@@ -11,7 +11,7 @@ await=/var/lib/kubelet/config.yaml
 
 echo "kubelet.sh: waiting for ${await}"
 
-until [ -f "${await}" ] ; do
+until [ -e "${await}" ] ; do
     sleep 1
 done
 
