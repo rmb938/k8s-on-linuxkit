@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -e
 
 if [ -e /var/lib/kubelet/config.yaml ] ; then
   echo "Kubernetes Node already has kubelet configuration"
@@ -25,3 +25,7 @@ else
   echo "Unknown kubeadm flag ${flag}"
   exit 1
 fi
+
+echo "kubeadm has completed... removing configuration"
+
+rm -f /run/kubeadm.yaml

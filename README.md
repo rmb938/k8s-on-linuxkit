@@ -107,4 +107,4 @@ This flag tells the node to join an existing kubernetes cluster.
 
 When running on bare metal it is recommended to use iPXE or some sort of network booting system. If that is not possible then building a raw image and dd'ing it to a bootable device may work however there is a known [issue](https://github.com/linuxkit/linuxkit/issues/3154) that could prevent it from working.
 
-TODO: link to ansible for automation
+Ansible to automate node configuration can be found here https://github.com/rmb938/ansible_k8s-on-linuxkit
