@@ -14,4 +14,9 @@ jobs:
           name: Install LinuxKit
           command: |
             go get -u github.com/linuxkit/linuxkit/src/cmd/linuxkit
-            sudo mv ~/go/bin/linuxkit /usr/local/bin
+            sudo mv ~/.go_workspace/bin/linuxkit /usr/local/bin
+      - checkout
+      - run:
+          name: Build LinuxKit Images
+          command: |
+            make build
