@@ -84,13 +84,13 @@ services:
 
   # Start K8s stuff
   - name: containerd
-    image: rbelgrave/containerd:dev
+    image: rmb938/containerd:dev
     cgroupsPath: podruntime/cri-containerd
   - name: kubelet
-    image: rbelgrave/kubelet:dev
+    image: rmb938/kubelet:dev
     cgroupsPath: podruntime/kubelet
   - name: kubeadm
-    image: rbelgrave/kubelet:dev
+    image: rmb938/kubelet:dev
     command: ["/usr/local/bin/kubeadm.sh"]
 files:
   - path: root/.ssh/authorized_keys
