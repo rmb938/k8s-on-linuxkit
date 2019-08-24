@@ -7,7 +7,7 @@ jobs:
       - run:
           name: Install Docker
           command: |
-            apk install docker
+            apt install docker
             systemctl start docker
       - run:
           name: Install LinuxKit
