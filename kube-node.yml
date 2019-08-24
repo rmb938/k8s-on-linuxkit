@@ -18,7 +18,7 @@ onboot:
   - name: rngd1
     image: linuxkit/rngd:v0.7
     command: ["/sbin/rngd", "-1"]
-  - name: dhcpcd
+  - name: dhcpcd1
     image: linuxkit/dhcpcd:v0.7
     command: ["/sbin/dhcpcd", "--nobackground", "-f", "/dhcpcd.conf", "-1"]
   - name: format
@@ -28,6 +28,10 @@ onboot:
     image: linuxkit/mount:v0.7
     command: ["/usr/bin/mountie", "-label", "NODE", "/var/node"]
 services:
+  - name: rngd
+    image: linuxkit/rngd:v0.7
+  - name: dhcpcd
+    image: linuxkit/dhcpcd:v0.7
   - name: acpid
     image: linuxkit/acpid:v0.7
     cgroupsPath: systemreserved/acpid
