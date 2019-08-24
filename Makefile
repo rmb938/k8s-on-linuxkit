@@ -8,7 +8,7 @@ build: clean build-containerd build-kubelet
 	linuxkit build -disable-content-trust kube-node.yml
 
 clean:
-	rm -rf kube-node-state/
+	rm -rf *-state/
 
 run:
 	linuxkit run qemu -cpus 2 -mem 3072 -publish 2222:22 -disk size=4G kube-node
