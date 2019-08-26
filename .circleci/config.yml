@@ -32,6 +32,10 @@ jobs:
       - run:
           name: Configure $PATH
           command: echo 'export PATH=/workspace/bin:$PATH' >> $BASH_ENV
+      - run:
+          name: Install packages
+          # ca-certificates are needed for attach_workspace (and git over https)
+          command: apt-get update && apt-get install -y ca-certificates curl git make openssh-client
       - attach_workspace:
           at: /workspace
       - checkout
