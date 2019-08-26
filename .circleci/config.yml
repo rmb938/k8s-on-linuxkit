@@ -1,22 +1,80 @@
 version: 2
 jobs:
-  build:
-    machine:
-      image: ubuntu-1604:201903-01 
+  dependencies:
+    docker:
+      - image: debian:stretch
     steps:
       - run:
-          name: Install Docker
-          command: |
-            sudo apt-get update
-            sudo apt install docker
-            sudo systemctl start docker
+          name: Create workspace
+          command: mkdir -p /workspace/bin
       - run:
-          name: Install LinuxKit
+          name: Install packages
+          command: apt-get update && apt-get install -y ca-certificates curl
+      - run:
+          name: Fetch binaries
           command: |
-            go get -u github.com/linuxkit/linuxkit/src/cmd/linuxkit
-            sudo mv ~/.go_workspace/bin/linuxkit /usr/local/bin
+            curl -fsSL -o /tmp/docker.tgz https://download.docker.com/linux/static/stable/x86_64/docker-18.03.0-ce.tgz
+            tar xfO /tmp/docker.tgz docker/docker > /workspace/bin/docker
+            curl -fsSL -o /workspace/bin/linuxkit https://github.com/linuxkit/linuxkit/releases/download/v0.7/linuxkit-linux-amd64
+      - run:
+          name: Versions
+          command: |
+             chmod +x /workspace/bin/docker # docker version deferred until daemon configured in relevant jobs
+             chmod +x /workspace/bin/linuxkit && /workspace/bin/linuxkit version
+      - persist_to_workspace:
+          root: /workspace
+          paths: bin
+
+  build-image:
+    requires:
+      - dependencies
+    docker:
+      - image: debian:stretch
+    steps:
+      - run:
+          name: Configure $PATH
+          command: echo 'export PATH=/workspace/bin:$PATH' >> $BASH_ENV
+      - attach_workspace:
+          at: /workspace
       - checkout
+      - setup_remote_docker:
+          version: 17.06.1-ce
       - run:
-          name: Build LinuxKit Images
+          name: Docker version
+          command: docker version
+      - run:
+          name: Build Image
           command: |
-            make build
+            PKG=${CIRCLE_JOB#pkg-}
+            mkdir /workspace/images
+            make build OUTPUT_DIR="/workspace/images"
+            ls -la /workspace/images
+      - persist_to_workspace:
+          root: /workspace
+          paths: images
+
+# version: 2
+# jobs:
+#   build:
+#     machine:
+#       image: ubuntu-1604:201903-01 
+#     steps:
+#       - run:
+#           name: Install Docker
+#           command: |
+#             sudo apt-get update
+#             sudo apt install docker
+#             sudo systemctl start docker
+#       - run:
+#           name: Install LinuxKit
+#           command: |
+#             go get -u github.com/linuxkit/linuxkit/src/cmd/linuxkit
+#             sudo mv ~/.go_workspace/bin/linuxkit /usr/local/bin
+#       - checkout
+#       - run:
+#           name: Build LinuxKit Images
+#           command: |
+#             make build-containerd
+#             make build-kubelet
+#             mkdir dist
+#             linuxkit build -disable-content-trust -dir dist/ kube-node.yml

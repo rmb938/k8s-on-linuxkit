@@ -1,3 +1,5 @@
+OUTPUT_DIR ?= .
+
 build-containerd:
 	linuxkit pkg build -org rmb938 -hash dev -disable-content-trust pkgs/containerd/
 
@@ -5,7 +7,7 @@ build-kubelet:
 	linuxkit pkg build -org rmb938 -hash dev -disable-content-trust pkgs/kubelet/
 
 build: clean build-containerd build-kubelet
-	linuxkit build -disable-content-trust kube-node.yml
+	linuxkit build -disable-content-trust -dir $(OUTPUT_DIR) kube-node.yml
 
 clean:
 	rm -rf *-state/
