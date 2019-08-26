@@ -58,4 +58,4 @@ workflows:
       - dependencies
       - build-image:
           requires:
-            - build-image
+            - dependencies
