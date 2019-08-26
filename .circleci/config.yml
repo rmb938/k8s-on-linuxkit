@@ -26,8 +26,6 @@ jobs:
           paths: bin
 
   build-image:
-    requires:
-      - dependencies
     docker:
       - image: debian:stretch
     steps:
@@ -53,28 +51,11 @@ jobs:
           root: /workspace
           paths: images
 
-# version: 2
-# jobs:
-#   build:
-#     machine:
-#       image: ubuntu-1604:201903-01 
-#     steps:
-#       - run:
-#           name: Install Docker
-#           command: |
-#             sudo apt-get update
-#             sudo apt install docker
-#             sudo systemctl start docker
-#       - run:
-#           name: Install LinuxKit
-#           command: |
-#             go get -u github.com/linuxkit/linuxkit/src/cmd/linuxkit
-#             sudo mv ~/.go_workspace/bin/linuxkit /usr/local/bin
-#       - checkout
-#       - run:
-#           name: Build LinuxKit Images
-#           command: |
-#             make build-containerd
-#             make build-kubelet
-#             mkdir dist
-#             linuxkit build -disable-content-trust -dir dist/ kube-node.yml
+workflows:
+  version: 2
+  build:
+    jobs:
+      - dependencies
+      - build-image:
+          requires:
+            - build-image
