@@ -47,7 +47,6 @@ jobs:
       - run:
           name: Build Image
           command: |
-            PKG=${CIRCLE_JOB#pkg-}
             mkdir /workspace/images
             make build OUTPUT_DIR="/workspace/images"
             ls -la /workspace/images

@@ -2,3 +2,4 @@
 *-cmdline
 *.img
 *-kernel
+*.ssh/

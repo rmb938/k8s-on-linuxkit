@@ -4,6 +4,10 @@
 
 1. Install linux kit https://github.com/linuxkit/linuxkit
     * curently only tested on linux with qemu so if you're not using that it probably wont work
+1. Copy your public ssh key into `.ssh/id_rsa.pub`
+    * If you don't do this you won't be able to ssh into the VM.
+1. Login Docker to Github Package Registry
+    * https://help.github.com/en/articles/configuring-docker-for-use-with-github-package-registry#authenticating-to-github-package-registry
 1. Run `make build`
 1. Run `make run`
 1. In another terminal run `make ssh`
@@ -28,8 +32,14 @@
 
 ### Usage
 
+1. Copy your public ssh key into `.ssh/id_rsa.pub`
+    * If you don't do this you won't be able to ssh into the machine.
+    * You should not do this in a production environment!
+1. Login Docker to Github Package Registry
+    * https://help.github.com/en/articles/configuring-docker-for-use-with-github-package-registry#authenticating-to-github-package-registry
 1. Run `make build`
 1. Run `linuxkit serve`
+1. Modify `ipxe-master` to use your workstation's IP address.
 1. Start your host, boot into an iPXE shell and run the following
     ```
     dhcp
@@ -78,6 +88,8 @@
 
 A custom kernel flag with the key of `kubeadm` has been added, by default the value is `init`.
 
+If an invalid value is given kubeadm will fail.
+
 #### Required Files
 
 The files listed bellow are required for kubeadm to run.
@@ -102,6 +114,27 @@ This flag tells the node to initialize a new kubernetes cluster.
 ##### `join`
 
 This flag tells the node to join an existing kubernetes cluster.
+
+### `authorized_keys_url`
+
+Optional HTTP(S) URL to download ssh keys from. If not given no ssh keys are automatically downloaded.
+
+This can be a url to keys from github i.e `https://github.com/rmb938.keys`.
+
+SSH Keys will be placed in `/run/config/ssh/authorized_keys`.
+
+If an invalid value is given or a failure occurs you will not be able to login. 
+
+## CGROUPS
+
+All system services are under the `systemreserved` cgroup and all container/pod runtime services are under the `podruntime` cgroup. 
+
+If you want to reservie computer resources make sure to set `--system-reserved-cgroup` and `--kube-reserved-cgroup` correctly.
+
+You will probably want to set these as the OS runs in memory. 
+The correct amount to reserve depends on the environment however it is recommended to
+reserve at least 1000 miliocores and 2GB for the system and 500 milicores and 1GB for the kube cgroups.
+
 
 ## Automation
 
