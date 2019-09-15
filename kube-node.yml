@@ -1,6 +1,6 @@
 kernel:
   image: linuxkit/kernel:4.19.56
-  cmdline: "console=tty0 console=tty1 console=ttyS0 kubeadm=init"
+  cmdline: "console=tty0 console=tty1 console=ttyS0"
 init:
   - linuxkit/init:1d8e0532ca588c5ad0d9ca6038349a70bb7ac626
   - linuxkit/runc:c1f0db27e71d948f3134b31ce76276f843849b0a
@@ -42,18 +42,6 @@ services:
     image: linuxkit/getty:v0.7
     # env:
     #  - INSECURE=true
-    binds:
-    - /etc/resolv.conf:/etc/resolv.conf
-    - /run:/run
-    - /tmp:/tmp
-    - /etc:/hostroot/etc
-    - /usr/bin/ctr:/usr/bin/ctr
-    - /usr/bin/runc:/usr/bin/runc
-    - /containers:/containers
-    - /var/log:/var/log
-    - /var/lib/containerd:/var/lib/containerd
-    - /dev:/dev
-    - /sys:/sys
     cgroupsPath: systemreserved/getty
   - name: logwrite
     image: linuxkit/logwrite:v0.7
@@ -64,7 +52,7 @@ services:
   - name: sshd
     image: linuxkit/sshd:v0.7
     binds:
-    - /run/config/ssh/authorized_keys:/root/.ssh/authorized_keys
+    - /root/.ssh/authorized_keys:/root/.ssh/authorized_keys
     - /etc/resolv.conf:/etc/resolv.conf
     - /run:/run
     - /tmp:/tmp
@@ -84,17 +72,17 @@ services:
 
   # Start K8s stuff
   - name: containerd
-    image: docker.pkg.github.com/rmb938/linuxkit-pkg-containerd/containerd:325fbbe72c38083dddebfeed85027fdd379221cd-amd64
+    image: docker.pkg.github.com/rmb938/linuxkit-pkg-containerd/containerd:1.0.0-amd64
     cgroupsPath: podruntime/cri-containerd
   - name: kubelet
-    image: docker.pkg.github.com/rmb938/linuxkit-pkg-kubelet/kubelet:9ddb4ddfd9e3539ec0df0c0bdfc6f2eb2e86e92e-amd64
+    image: docker.pkg.github.com/rmb938/linuxkit-pkg-kubelet/kubelet:1.0.1-amd64
     cgroupsPath: podruntime/kubelet
   - name: kubeadm
-    image: docker.pkg.github.com/rmb938/linuxkit-pkg-kubelet/kubelet:9ddb4ddfd9e3539ec0df0c0bdfc6f2eb2e86e92e-amd64
+    image: docker.pkg.github.com/rmb938/linuxkit-pkg-kubelet/kubelet:1.0.1-amd64
     cgroupsPath: podruntime/kubeadm
     command: ["/usr/local/bin/kubeadm.sh"]
 files:
-  - path: /run/config/ssh/authorized_keys
+  - path: /root/.ssh/authorized_keys
     source: .ssh/id_rsa.pub
     mode: "0600"
     optional: true

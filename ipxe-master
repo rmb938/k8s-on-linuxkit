@@ -1,4 +1,0 @@
-#!ipxe
-
-initrd http://192.168.26.99:8080/kube-node-initrd.img
-chain http://192.168.26.99:8080/kube-node-kernel console=tty0 kubeadm=init
