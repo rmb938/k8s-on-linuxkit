@@ -20,7 +20,7 @@ onboot:
     command: ["/sbin/rngd", "-1"]
   - name: dhcpcd1
     image: linuxkit/dhcpcd:v0.7
-    command: ["/sbin/dhcpcd", "--nobackground", "-f", "/dhcpcd.conf", "-1"]
+    command: ["/sbin/dhcpcd", "--nobackground", "--env", "force_hostname=YES", "-f", "/dhcpcd.conf", "-1"]
   - name: format
     image: linuxkit/format:v0.7
     command: ["/usr/bin/format", "-type", "xfs", "-label", "NODE", "-verbose"]
