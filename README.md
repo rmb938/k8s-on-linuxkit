@@ -124,11 +124,9 @@ Once kubeadm runs and creates the file `/var/lib/kubelet/config.yaml` it will ne
 
 All system services are under the `systemreserved` cgroup and all container/pod runtime services are under the `podruntime` cgroup. 
 
-If you want to reservie computer resources make sure to set `--system-reserved-cgroup` and `--kube-reserved-cgroup` correctly.
+Since the OS runs in memory it is very important to make sure not to run out of memory.
 
-You will probably want to set these as the OS runs in memory. 
-The correct amount to reserve depends on the environment however it is recommended to
-reserve at least 1000 miliocores and 2GB for the system and 500 milicores and 1GB for the kube cgroups.
+It may be necessary to reserve computer resources https://kubernetes.io/docs/tasks/administer-cluster/reserve-compute-resources/ 
 
 ## Automation
 
